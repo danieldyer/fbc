@@ -86,11 +86,10 @@ static void calculate_cmap(struct fb_cmap *cmap)
 {
 	float gamma = 0;
 	unsigned long depth = DEFAULT_DEPTH;
-	unsigned long temp;
 	unsigned long r = 0;
 	unsigned long g = 0;
 	unsigned long b = 0;
-	int i;
+	int i, temp;
 	
 	if(opt_gamma)
 		gamma = strtof(opt_gamma, NULL);
@@ -111,6 +110,8 @@ static void calculate_cmap(struct fb_cmap *cmap)
 	if(r > depth || g > depth || b > depth)
 		die("Colour offset too large\n");
 	
+	cmap->start = 0;
+	cmap->len = depth;
 	cmap->transp = NULL;
 	cmap->red = malloc(depth * sizeof(__u16));
 	cmap->green = malloc(depth * sizeof(__u16));
@@ -118,10 +119,14 @@ static void calculate_cmap(struct fb_cmap *cmap)
 	
 	for(i = 0; i < depth; i++)
 	{
-		temp = lround(pow(i / (float)(depth-1), gamma) * (float)(1<<16));
-		cmap->red[i] = temp - r;
-		cmap->green[i] = temp - g;
-		cmap->blue[i] = temp - b;
+		temp = (i - r) < 0 ? 0 : i - r;
+		cmap->red[i] = lround(pow(temp / (float)(depth-1), gamma) * (float)(1<<16));
+		
+		temp = (i - g) < 0 ? 0 : i - g;
+		cmap->green[i] = lround(pow(temp / (float)(depth-1), gamma) * (float)(1<<16));
+		
+		temp = (i - b) < 0 ? 0 : i - b;
+		cmap->blue[i] = lround(pow(temp / (float)(depth-1), gamma) * (float)(1<<16));
 	}
 	
     return;
