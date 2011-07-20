@@ -2,11 +2,12 @@
 # Makefile for fbc utility
 #
 
-CC =		gcc -Wall -O2 -I. -lm
+CC =		gcc -Wall -O2 -I.
 BISON =		bison -d
 FLEX =		flex
 INSTALL =	install
 RM =		rm -f
+LDLIBS += 	-lm
 
 All:		fbc
 
