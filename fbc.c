@@ -90,6 +90,7 @@ static void calculate_cmap(struct fb_cmap *cmap)
 	unsigned long g = 0;
 	unsigned long b = 0;
 	int i, temp;
+	u16 value;
 	
 	if(opt_gamma)
 		gamma = strtof(opt_gamma, NULL);
@@ -120,13 +121,13 @@ static void calculate_cmap(struct fb_cmap *cmap)
 	for(i = 0; i < depth; i++)
 	{
 		temp = (i - r) < 0 ? 0 : i - r;
-		cmap->red[i] = lround(pow(temp / (float)(depth-1), gamma) * (float)(1<<16)) - 1;
+		cmap->red[i] = lround(pow(temp / (float)(depth-1), gamma) * 0xffff);
 		
 		temp = (i - g) < 0 ? 0 : i - g;
-		cmap->green[i] = lround(pow(temp / (float)(depth-1), gamma) * (float)(1<<16)) - 1;
+		cmap->green[i] = lround(pow(temp / (float)(depth-1), gamma) * 0xffff);
 		
 		temp = (i - b) < 0 ? 0 : i - b;
-		cmap->blue[i] = lround(pow(temp / (float)(depth-1), gamma) * (float)(1<<16)) - 1;
+		cmap->blue[i] = lround(pow(temp / (float)(depth-1), gamma) * 0xffff);
 	}
 	
     return;
