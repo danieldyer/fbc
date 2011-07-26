@@ -90,7 +90,7 @@ static void calculate_cmap(struct fb_cmap *cmap)
 	unsigned long g = 0;
 	unsigned long b = 0;
 	int i, temp;
-	u16 value;
+	__u16 value;
 	
 	if(opt_gamma)
 		gamma = strtof(opt_gamma, NULL);
